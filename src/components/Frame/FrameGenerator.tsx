@@ -65,7 +65,7 @@ const FrameGenerator = () => {
 
       if (file && file.type.startsWith("image/")) {
         if (file.size > 10 * 1024 * 1024) {
-          toast("Please select an image smaller than 10MB");
+          toast.error("Please select an image smaller than 10MB");
           return;
         }
 
@@ -75,14 +75,14 @@ const FrameGenerator = () => {
           setUploadedImage(e.target?.result as string);
           setImagePosition({ x: 0, y: 0 });
           setImageScale(1);
-          toast("Image uploaded successfully");
+          toast.success("Image uploaded successfully");
         };
         reader.onerror = () => {
-          toast("Upload failed");
+          toast.error("Upload failed");
         };
         reader.readAsDataURL(file);
       } else {
-        toast("Invalid file type");
+        toast.error("Invalid file type");
       }
     },
     []
@@ -220,40 +220,40 @@ const FrameGenerator = () => {
     }
   }, [dragState.isDragging, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
 
-  const downloadBanner = useCallback(async () => {
-    if (!uploadedImage || !containerRef.current) {
-      toast("No image to download");
-      return;
-    }
+const downloadBanner = useCallback(async () => {
+  if (!uploadedImage || !containerRef.current) {
+    toast.error("No image to download");
+    return;
+  }
 
-    setIsProcessing(true);
+  setIsProcessing(true);
 
-    try {
-      const canvas = await html2canvas(containerRef.current, {
-        allowTaint: true,
-        useCORS: true,
-        scale: 2,
-        width: FRAME_SIZE,
-        height: FRAME_SIZE,
-        backgroundColor: null,
-      });
+  try {
+    const canvas = await html2canvas(containerRef.current, {
+      allowTaint: true,
+      useCORS: true,
+      scale: 2,
+      width: FRAME_SIZE,
+      height: FRAME_SIZE,
+      backgroundColor: null,
+    });
 
-      // Create download link
-      const link = document.createElement("a");
-      link.download = `banner-${Date.now()}.png`;
-      link.href = canvas.toDataURL("image/png", 1.0);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    // Create download link
+    const link = document.createElement("a");
+    link.download = `banner-${Date.now()}.png`;
+    link.href = canvas.toDataURL("image/png", 1.0);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
-      toast("Download successful");
-    } catch (error) {
-      console.error("Download failed:", error);
-      toast("Download failed");
-    } finally {
-      setIsProcessing(false);
-    }
-  }, [uploadedImage, FRAME_SIZE]);
+    toast.success("Download successful");
+  } catch (error) {
+    console.error("Download failed:", error);
+    toast.error("Download failed");
+  } finally {
+    setIsProcessing(false);
+  }
+}, [uploadedImage, FRAME_SIZE]);
 
   const resetImage = useCallback(() => {
     setImagePosition({ x: 0, y: 0 });
