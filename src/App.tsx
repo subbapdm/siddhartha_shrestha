@@ -11,7 +11,7 @@ function App() {
       <Navbar />
       <Hero />
       <Container>
-        <div className="py-10">
+        <div className="py-10 h-full">
           <FrameGenerator />
         </div>
       </Container>
