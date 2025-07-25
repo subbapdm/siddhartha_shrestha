@@ -8,7 +8,7 @@ const Navbar = () => {
   console.log(isOpen);
 
   return (
-    <div className="relative bg-[#0558b0] px-5 px-8">
+    <div className="relative bg-[#0558b0] px-4 md:px-8">
       <div className="text-white flex items-center justify-between py-3">
 
         <div className="">
